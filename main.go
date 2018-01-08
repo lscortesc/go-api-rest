@@ -79,9 +79,9 @@ func InsertPeople(w http.ResponseWriter, r *http.Request) {
 	var person Person
 
 	json.NewDecoder(r.Body).Decode(&person)
+	now := time.Now()
 
 	for i := 0; i < 1000; i++ {
-		now := time.Now()
 		db.Exec(
 			"insert into people (firstname, lastname, created_at, updated_at) values(?, ?, ?, ?)",
 			person.Firstname,
