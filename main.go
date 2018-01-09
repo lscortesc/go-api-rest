@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -55,8 +56,32 @@ func main() {
 	router.HandleFunc("/people", GetPeople).Methods("GET")
 	router.HandleFunc("/people", CreatePeople).Methods("POST")
 	router.HandleFunc("/people/list", InsertPeople).Methods("POST")
+	router.HandleFunc("/people/{id}", GetPerson).Methods("GET")
+	router.HandleFunc("/people/{id}", DeletePerson).Methods("DELETE")
 
 	log.Fatal(http.ListenAndServe(":4000", router))
+}
+
+func DeletePerson(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	var person Person
+
+	if err = db.First(&person, params["id"]).Error; err != nil {
+		fmt.Fprintf(w, "ID %s Not Found", params["id"])
+		return
+	}
+
+	db.Delete(&person)
+	json.NewEncoder(w).Encode(&person)
+}
+
+func GetPerson(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	var person Person
+
+	db.First(&person, params["id"])
+	json.NewEncoder(w).Encode(person)
+
 }
 
 func GetPeople(w http.ResponseWriter, r *http.Request) {
@@ -77,11 +102,12 @@ func CreatePeople(w http.ResponseWriter, r *http.Request) {
 
 func InsertPeople(w http.ResponseWriter, r *http.Request) {
 	var person Person
+	records := 1000
 
 	json.NewDecoder(r.Body).Decode(&person)
 	now := time.Now()
 
-	for i := 0; i < 1000; i++ {
+	for i := 0; i < records; i++ {
 		db.Exec(
 			"insert into people (firstname, lastname, created_at, updated_at) values(?, ?, ?, ?)",
 			person.Firstname,
