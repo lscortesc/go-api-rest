@@ -22,5 +22,7 @@ This api is based on this [post](https://dev.to/aspittel/how-i-built-an-api-with
 | /people/{id} | DELETE | id | Delete a person |
 | /people/list | POST | none | Create 1000 records |
 
+### Smart commits with Jira
+
 
 
