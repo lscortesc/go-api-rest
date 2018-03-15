@@ -51,8 +51,10 @@ func main() {
 
 	db.AutoMigrate(&Person{})
 
+	// Add Router
 	router := mux.NewRouter()
 
+	// Handle Routes
 	router.HandleFunc("/people", GetPeople).Methods("GET")
 	router.HandleFunc("/people", CreatePeople).Methods("POST")
 	router.HandleFunc("/people/list", InsertPeople).Methods("POST")
