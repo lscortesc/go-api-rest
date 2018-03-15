@@ -24,5 +24,6 @@ This api is based on this [post](https://dev.to/aspittel/how-i-built-an-api-with
 
 ### Smart commits with Jira
 
+This is another example with Jira and Github
 
 
